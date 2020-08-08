@@ -39,18 +39,25 @@ class MayMayHelpCommand(commands.HelpCommand):
                 [f'> `{self.get_command_signature(cmd)}` - {cmd.help or "No help provided."}' for cmd in cmds])
 
         embed_dict = {
-            "ℹ️": bot.embed(description="<argument> - This means the argument is **required.**\n[argument] - This means the argument is **optional.**\n[A|B] - This means that it can be either **A or B.**\n[argument...] - This means you can have **multiple arguments.**\nNow that you know the basics, it should be noted that...\n**You do not type in the brackets!**"),
+            "ℹ️": bot.embed(
+                description="<argument> - This means the argument is **required.**\n[argument] - This means the argument is **optional.**\n[A|B] - This means that it can be either **A or B.**\n[argument...] - This means you can have **multiple arguments.**\nNow that you know the basics, it should be noted that...\n**You do not type in the brackets!**"),
             "↩️": embed
         }
         valid_reactions = [*embed_dict.keys()] + ['⏹']
         msg = await ctx.send(embed=embed)
+
+        def check(reaction, user):
+            return str(reaction.emoji) in valid_reactions and user == ctx.author and reaction.message.id == msg.id
+
         for i in valid_reactions:
             await msg.add_reaction(i)
         try:
             while True:
                 # I am aware that I can use ext menus here
                 # whatevs
-                done, pending = await asyncio.wait([bot.wait_for('reaction_add', timeout=300, check=lambda re, us: str(re.emoji) in valid_reactions and us == ctx.author and re.message.id == msg.id), bot.wait_for('reaction_remove', timeout=300, check=lambda re, us: str(re.emoji) in valid_reactions and us == ctx.author and re.message.id == msg.id)], return_when=asyncio.FIRST_COMPLETED)
+                done, pending = await asyncio.wait([bot.wait_for('reaction_add', timeout=300, check=check),
+                                                    bot.wait_for('reaction_remove', timeout=300, check=check)],
+                                                   return_when=asyncio.FIRST_COMPLETED)
                 data = done.pop().result()
                 if str(data[0].emoji) == '⏹':
                     await msg.delete()
