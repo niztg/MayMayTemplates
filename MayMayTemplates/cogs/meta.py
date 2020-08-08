@@ -40,10 +40,7 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=["sourcecode", "src", "github"], help="Shows source code for a given command")
     async def source(self, ctx, *, command=None):
-        # Code used from Rapptz' RoboDanny GitHub repository provided by the MIT License
-        # https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/meta.py#L328-L366
-        # Copyright (c) 2015 Rapptz
-        # And niztg's CyberTron5000 GitHub repository provided by the MIT License
+        # Code used from niztg's CyberTron5000 GitHub repository provided by the MIT License
         # https://github.com/niztg/CyberTron5000/blob/master/CyberTron5000/cogs/meta.py/#L97-L139
         # Copyright (c) 2020 nizcomix
         if not command:

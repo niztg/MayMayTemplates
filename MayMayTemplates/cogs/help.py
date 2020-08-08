@@ -48,12 +48,15 @@ class MayMayHelpCommand(commands.HelpCommand):
             await msg.add_reaction(i)
         try:
             while True:
-                r, u = await bot.wait_for('reaction_add', timeout=300, check=lambda re, us: str(re.emoji) in valid_reactions and us == ctx.author and re.message.id == msg.id)
-                if str(r.emoji) == '⏹':
+                # I am aware that I can use ext menus here
+                # whatevs
+                done, pending = await asyncio.wait([bot.wait_for('reaction_add', timeout=300, check=lambda re, us: str(re.emoji) in valid_reactions and us == ctx.author and re.message.id == msg.id), bot.wait_for('reaction_remove', timeout=300, check=lambda re, us: str(re.emoji) in valid_reactions and us == ctx.author and re.message.id == msg.id)], return_when=asyncio.FIRST_COMPLETED)
+                data = done.pop().result()
+                if str(data[0].emoji) == '⏹':
                     await msg.delete()
                     await ctx.message.add_reaction(emoji="☑️")
                 else:
-                    e = embed_dict.get(str(r.emoji))
+                    e = embed_dict.get(str(data[0].emoji))
                     await msg.edit(embed=e)
         except asyncio.TimeoutError:
             pass
