@@ -1,0 +1,6 @@
+/cogs/
+/venv/
+/.idea
+MayMayTemplates/config.py
+.DS_Store
+
