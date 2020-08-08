@@ -34,8 +34,9 @@ class Templates(commands.Cog):
             return {int(key): value for key, value in dict(data).items()}
 
     def compress_string(self, string: str):
-        for x, y in zip(["'", '.', '!', '"', ',', '-'], ['', '', '', '', '', '']):
-            string.replace(x, y)
+        for x in string:
+            if x in ("'", '.', '!', '"', ',', '-', '?'):
+                string = string.replace(x, '')
         return string.strip().lower().replace(' ', '')
 
     async def fetch_template(self, query: str):
@@ -193,6 +194,10 @@ class Templates(commands.Cog):
         embed = self.bot.embed(title='Random Template', description=f'{description}\nBy {author}', url=template)
         embed.set_image(url=template)
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def test(self, ctx, *, string):
+        return await ctx.send(self.compress_string(string))
 
 
 def setup(bot):
