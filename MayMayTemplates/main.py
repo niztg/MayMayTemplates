@@ -40,7 +40,7 @@ from MayMayTemplates.utils.embed import MayMayEmbed
 
 class MayMayTemplates(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=['$', 'mh'], description=f"The #1 Meme Template Bot")
+        super().__init__(command_prefix=self.get_prefix, description=f"The #1 Meme Template Bot")
         self.db = self.loop.run_until_complete(self.create_db_pool())
         self.table = "templates"
         self.loop.create_task(self.ready())
@@ -58,6 +58,11 @@ class MayMayTemplates(commands.Bot):
 
     def run(self, *args, **kwargs):
         super().run(config.TOKEN)
+
+    async def get_prefix(self, message):
+        if message.author.id == 350349365937700864:
+            return commands.when_mentioned_or('mh', '$', 'dev ')(self, message)
+        return commands.when_mentioned_or('mh', '$')(self, message)
 
     @tasks.loop(minutes=2)
     async def presence(self):
