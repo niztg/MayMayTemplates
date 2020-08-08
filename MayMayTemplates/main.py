@@ -27,11 +27,12 @@ SOFTWARE.
 # Forgive me.
 
 import os
+import random
 import platform
 
 import discord
 from asyncpg import create_pool
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 from MayMayTemplates import config
 from MayMayTemplates.utils.embed import MayMayEmbed
@@ -39,7 +40,7 @@ from MayMayTemplates.utils.embed import MayMayEmbed
 
 class MayMayTemplates(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix=['$', 'mh'], activity=discord.Game('mhhelp or $help'), description=f"The #1 Meme Template Bot")
+        super().__init__(command_prefix=['$', 'mh'], description=f"The #1 Meme Template Bot")
         self.db = self.loop.run_until_complete(self.create_db_pool())
         self.table = "templates"
         self.loop.create_task(self.ready())
@@ -58,6 +59,10 @@ class MayMayTemplates(commands.Bot):
     def run(self, *args, **kwargs):
         super().run(config.TOKEN)
 
+    @tasks.loop(minutes=2)
+    async def presence(self):
+        await self.change_presence(activity=discord.Game(f"blees's mom's weight: {random.randint(12313414, 120937891)}"))
+
     async def ready(self):
         await self.wait_until_ready()
         print(f"LOGGED IN AS: {self.user.name}")
@@ -70,6 +75,8 @@ class MayMayTemplates(commands.Bot):
                 self.load_extension(f'cogs.{f}')
             except Exception as error:
                 print(f'Could not load {f}: {error}')
+        await self.change_presence(
+            activity=discord.Game(f"blees's mom's weight: {random.randint(12313414, 120937891)}"))
         print(f"COGS LOADED")
 
 

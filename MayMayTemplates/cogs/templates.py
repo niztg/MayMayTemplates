@@ -34,7 +34,7 @@ class Templates(commands.Cog):
             return {int(key): value for key, value in dict(data).items()}
 
     def compress_string(self, string: str):
-        for x, y in zip(["'", '.', '!', '"'], ['', '', '', '']):
+        for x, y in zip(["'", '.', '!', '"', ',', '-'], ['', '', '', '', '', '']):
             string.replace(x, y)
         return string.strip().lower().replace(' ', '')
 
