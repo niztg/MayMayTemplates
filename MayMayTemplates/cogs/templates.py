@@ -33,12 +33,6 @@ class Templates(commands.Cog):
         if values:
             return {int(key): value for key, value in dict(data).items()}
 
-    def compress_string(self, string: str):
-        for x in string:
-            if x in ("'", '.', '!', '"', ',', '-', '?'):
-                string = string.replace(x, '')
-        return string.strip().lower().replace(' ', '')
-
     async def fetch_template(self, query: str):
         data = await self.bot.db.fetch("SELECT * FROM %s" % self.db_table)
         query1 = self.compress_string(query)
@@ -76,6 +70,12 @@ class Templates(commands.Cog):
             if not any(a in image_url for a in ['.png', '.jpg', '.jpeg', '.webp', '.gif']):
                 return False
         return True
+
+    def compress_string(self, string: str):
+        for x in string:
+            if x in ("'", '.', '!', '"', ',', '-', '?'):
+                string = string.replace(x, '')
+        return string.strip().lower().replace(' ', '')
 
     @commands.command(aliases=['lb'])
     async def leaderboard(self, ctx):
