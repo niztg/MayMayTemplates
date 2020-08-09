@@ -115,11 +115,12 @@ class Templates(commands.Cog):
             data = await self.fetch_template(query)
             embed = self.bot.embed(title=f"Results ({len(data)})",
                                    description="Here are the results which matched your query.")
+            data = sorted(data, key=lambda x: x['percent'], reverse=True)
             for x in data:
                 try:
                     embed.add_field(
-                        name=f"{x.get('query')} by {(await fetch_appropriate_user(x.get('author'), self.bot)).name} ({x.get('percent')}%)",
-                        value=x.get('template'))
+                        name=f"Result #{data.index(x)+1}:\n> {x.get('query')}\n{(await fetch_appropriate_user(x.get('author'), self.bot))}\n`{x.get('percent')}%`",
+                        value=f"[Click Here]({x.get('template')})")
                 except Exception:
                     break
         await ctx.send(embed=embed)

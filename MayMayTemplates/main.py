@@ -42,7 +42,6 @@ class MayMayTemplates(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=self.get_prefix, description=f"The #1 Meme Template Bot")
         self.db = self.loop.run_until_complete(self.create_db_pool())
-        self.table = "templates"
         self.loop.create_task(self.ready())
         self.embed = MayMayEmbed
         self.config = {"owner": 350349365937700864}
