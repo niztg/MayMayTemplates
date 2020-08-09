@@ -195,10 +195,6 @@ class Templates(commands.Cog):
         embed.set_image(url=template)
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def test(self, ctx, *, string):
-        return await ctx.send(self.compress_string(string))
-
 
 def setup(bot):
     bot.add_cog(Templates(bot))

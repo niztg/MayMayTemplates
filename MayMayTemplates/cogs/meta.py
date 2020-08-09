@@ -81,6 +81,10 @@ class Meta(commands.Cog):
                 url='https://media.discordapp.net/attachments/381963689470984203/740703797843722431/Screen_Shot_2020-08-05_at_6.52.17_PM.png')
             await ctx.send(embed=embed)
 
+    @commands.command()
+    async def support(self, ctx):
+        await ctx.send(content='Server: https://discord.com/invite/2fxKxJH\nGithub: https://github.com/niztg/MayMayTemplates\nCyberTron5000: https://cybertron-5k.netlify.app', embed=self.bot.embed(title=f"Support me", description=f"[Git](https://github.com/niztg/cybertron5000)\n[Server](https://cybertron-5k.netlify.app/server)\nCheck out [CyberTron5000](https://cybertron-5k.netlify.app), {self.bot.owner.name}'s **real** bot."))
+
 
 def setup(bot):
     bot.add_cog(Meta(bot))
