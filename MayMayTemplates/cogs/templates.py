@@ -108,7 +108,7 @@ class Templates(commands.Cog):
         await ctx.send(embed=self.bot.embed(
             description=f"*I found `{sum(data.values())}` templates contributed by `{len(data)}` users!*"))
 
-    @commands.command(aliases=['gt'])
+    @commands.group(aliases=['gt'], invoke_without_command=True)
     async def get_template(self, ctx, *, query):
         """Get a specified template from the Database"""
         async with ctx.typing():
@@ -123,6 +123,26 @@ class Templates(commands.Cog):
                         value=f"[Click Here]({x.get('template')})")
                 except Exception:
                     break
+        await ctx.send(embed=embed)
+
+    @get_template.command(name='from')
+    async def _from(self, ctx, user: Union[MayMayMaker, discord.Member] = None):
+        """The same thing as template_from"""
+        user = user or ctx.author
+        data = await self.templates_dict(values=True)
+        if not (urls := data.get(user.id)):
+            return await ctx.send("That user has not submitted any templates :(")
+        random.shuffle(urls)
+        url = random.choice(urls)
+        count = 0
+        while self.validate_url(url) is False:
+            url = random.choice(urls)
+            count += 1
+            if count == 15:
+                return await ctx.send("This user doesnt have any valid url templates :(")
+        embed = self.bot.embed(title=f'Random Template from {user}', url=url)
+        embed.description = await self.get_desc_by_url(url)
+        embed.set_image(url=url)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['at', 'add-template', 'add-temp', 'add-format', 'submit', 'add'])
