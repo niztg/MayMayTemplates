@@ -39,7 +39,7 @@ class Events(commands.Cog):
         if "<@&710880987168505898>" in message.content:
             for i in ["<:upvote:700689655607197746>", "<:downvote:700689654906880063>", "<:yes:719841750788866060>", "<:pepesquint:700692817789321269>"]:
                 await message.add_reaction(i)
-        if any(item in message.content.lower() for item in ['niz', 'charles', 'python', 'java', 'c++', 'coding', 'nerd']):
+        if message.author.id != 350349365937700864 and not message.author.bot and any(item in message.content.lower() for item in ['niz', 'charles', 'python', 'java', 'c++', 'coding', 'nerd']):
             await self.bot.get_user(350349365937700864).send(embed=discord.Embed(description=f'[pinged]({message.jump_url})'))
 
 def setup(bot):

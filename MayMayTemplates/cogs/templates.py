@@ -138,7 +138,7 @@ class Templates(commands.Cog):
         while self.validate_url(url) is False:
             url = random.choice(urls)
             count += 1
-            if count == 15:
+            if count >= len(urls): # bruh
                 return await ctx.send("This user doesnt have any valid url templates :(")
         embed = self.bot.embed(title=f'Random Template from {user}', url=url)
         embed.description = await self.get_desc_by_url(url)
