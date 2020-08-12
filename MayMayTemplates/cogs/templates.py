@@ -1,3 +1,20 @@
+"""
+MayMayTemplates Discord Bot
+Copyright (C) 2020  nizcomix
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 import random
 import re
 from typing import Union
@@ -27,7 +44,8 @@ class Templates(commands.Cog):
         self.db_table = "templates"
 
     async def templates_dict(self, values: bool = False):
-        data = await self.bot.db.fetch("SELECT user_id, array_agg(template_url) FROM %s GROUP BY user_id" % self.db_table)
+        data = await self.bot.db.fetch(
+            "SELECT user_id, array_agg(template_url) FROM %s GROUP BY user_id" % self.db_table)
         if not values:
             return {int(key): len(value) for key, value in dict(data).items()}
         if values:
@@ -52,7 +70,8 @@ class Templates(commands.Cog):
         return (await self.bot.db.fetch("SELECT query FROM %s WHERE template_url = $1" % self.db_table, url))[0][0]
 
     async def get_user_by_url(self, url):
-        return int((await self.bot.db.fetch("SELECT user_id FROM %s WHERE template_url = $1" % self.db_table, url))[0][0])
+        return int(
+            (await self.bot.db.fetch("SELECT user_id FROM %s WHERE template_url = $1" % self.db_table, url))[0][0])
 
     def validate_url(self, image_url):
         # NOTE: i did not write this regex
@@ -113,17 +132,19 @@ class Templates(commands.Cog):
         """Get a specified template from the Database"""
         async with ctx.typing():
             data = await self.fetch_template(query)
-            embed = self.bot.embed(title=f"Results ({len(data)})",
-                                   description="Here are the results which matched your query.")
+            embed = self.bot.embed(title=f"Results ({len(data)})", description="Here are the results which matched your query.")
             data = sorted(data, key=lambda x: x['percent'], reverse=True)
             for x in data:
-                try:
-                    embed.add_field(
-                        name=f"Result #{data.index(x)+1}:\n> {x.get('query')}\n{(await fetch_appropriate_user(x.get('author'), self.bot))}\n`{x.get('percent')}%`",
-                        value=f"[Click Here]({x.get('template')})")
-                except Exception:
-                    break
-        await ctx.send(embed=embed)
+                embed.add_field(name=f"Result #{data.index(x) + 1}:\n> {x.get('query')}\n{(await fetch_appropriate_user(x.get('author'), self.bot))}\n`{x.get('percent')}%`", value=f"[Click Here]({x.get('template')})")
+        while True:
+            try:
+                return await ctx.send(embed=embed)
+            except discord.HTTPException:
+                embed.remove_field(index=len(embed.fields)-1)
+
+    @get_template.command(name='compact', aliases=['comp'])
+    async def _comp(self, ctx, *, query):
+        pass
 
     @get_template.command(name='from')
     async def _from(self, ctx, user: Union[MayMayMaker, discord.Member] = None):
@@ -138,7 +159,7 @@ class Templates(commands.Cog):
         while self.validate_url(url) is False:
             url = random.choice(urls)
             count += 1
-            if count >= len(urls): # bruh
+            if count >= len(urls):  # bruh
                 return await ctx.send("This user doesnt have any valid url templates :(")
         embed = self.bot.embed(title=f'Random Template from {user}', url=url)
         embed.description = await self.get_desc_by_url(url)
@@ -152,7 +173,8 @@ class Templates(commands.Cog):
             return await ctx.send("A template with that exact description already exists! Try changing it up a bit.")
         if not self.validate_url(image_url):
             raise commands.BadArgument('That is not a valid image url!')
-        await self.bot.db.execute("INSERT INTO %s (template_url, user_id, query) VALUES ($1, $2, $3)" % self.db_table, image_url, str(ctx.author.id), description)
+        await self.bot.db.execute("INSERT INTO %s (template_url, user_id, query) VALUES ($1, $2, $3)" % self.db_table,
+                                  image_url, str(ctx.author.id), description)
         await ctx.send("MEME DATABSE HAS BEEN UPDATED")
 
     @commands.command(aliases=['aa', 'adda'])
@@ -164,7 +186,8 @@ class Templates(commands.Cog):
             return await ctx.send("There is already a template with this exact query!")
         for attachment in ctx.message.attachments:
             await self.bot.db.execute(
-                "INSERT INTO %s (template_url, user_id, query) VALUES ($1, $2, $3)" % self.db_table, str(attachment.url),
+                "INSERT INTO %s (template_url, user_id, query) VALUES ($1, $2, $3)" % self.db_table,
+                str(attachment.url),
                 str(ctx.author.id), description)
         await ctx.send("MEME DATABSE HAS BEEN UPDATED")
 
@@ -215,7 +238,6 @@ class Templates(commands.Cog):
         embed = self.bot.embed(title='Random Template', description=f'{description}\nBy {author}', url=template)
         embed.set_image(url=template)
         await ctx.send(embed=embed)
-
 
 def setup(bot):
     bot.add_cog(Templates(bot))

@@ -1,3 +1,17 @@
+"""
+MayMayTemplates Discord Bot
+Copyright (C) 2020  nizcomix
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+"""
 import traceback
 
 import discord
@@ -12,9 +26,9 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        # Traceback code used from Daggy1234's Dagbot GitHub Repository provided by the GNU Affero General Public License v3.0
-        # https://github.com/Daggy1234/dagbot/blob/master/dagbot/extensions/errors.py#L38-L42
-        # Copyright (C) 2020  Daggy1234
+        # Lines 29-50 used from niztg's CyberTron5000 GitHub Repository provided by the MIT License
+        # https://github.com/niztg/CyberTron5000/blob/master/CyberTron5000/cogs/events.py/#L25-L48
+        # Copyright (C) 2020  nizcomix
         et = type(error)
         tb = error.__traceback__
         v = 4
@@ -39,7 +53,7 @@ class Events(commands.Cog):
         if "<@&710880987168505898>" in message.content:
             for i in ["<:upvote:700689655607197746>", "<:downvote:700689654906880063>", "<:yes:719841750788866060>", "<:pepesquint:700692817789321269>"]:
                 await message.add_reaction(i)
-        if message.author.id != 350349365937700864 and not message.author.bot and any(item in message.content.lower() for item in ['niz', 'charles', 'python', 'java', 'c++', 'coding', 'nerd']):
+        if message.author.id != 350349365937700864 and not message.author.bot and any(item in message.content.lower() for item in ['niz']):
             await self.bot.get_user(350349365937700864).send(embed=discord.Embed(description=f'[pinged]({message.jump_url})'))
 
 def setup(bot):
