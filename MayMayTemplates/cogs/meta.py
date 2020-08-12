@@ -54,24 +54,24 @@ class Meta(commands.Cog):
 
     @commands.command(aliases=["sourcecode", "src", "github"], help="Shows source code for a given command")
     async def source(self, ctx, *, command=None):
-        # Code used from niztg's CyberTron5000 GitHub repository provided by the MIT License
+        # Lines 55-96 used from niztg's CyberTron5000 GitHub repository provided by the MIT License
         # https://github.com/niztg/CyberTron5000/blob/master/CyberTron5000/cogs/meta.py/#L97-L139
         # Copyright (c) 2020 nizcomix
         if not command:
             embed = self.bot.embed(title="<:star:737736250718421032> Check out the source code on GitHub!", url="https://github.com/niztg/MayMayTemplates")
             embed.description = "Star the GitHub repository to support the bot!"
             embed.add_field(name="<:license:737733205645590639> LICENSE",
-                            value=f"[MIT](https://opensource.org/licenses/MIT)")
+                            value=f"GNU AGPL")
             embed.set_thumbnail(url=self.bot.user.avatar_url)
             embed.set_image(
-                url='https://media.discordapp.net/attachments/381963689470984203/740703797843722431/Screen_Shot_2020-08-05_at_6.52.17_PM.png')
+                url='https://media.discordapp.net/attachments/738163422117625876/743146606790049872/Screen_Shot_2020-08-12_at_12.39.08_PM.png')
             return await ctx.send(embed=embed)
         elif command == "help":
             embed = self.bot.embed(title=f"<:star:737736250718421032> Sourcecode for command help/?", url="https://github.com/niztg/MayMayTemplates/blob/master/MayMayTemplates/cogs/help.py/#L8-L77")
             embed.description = "Star the GitHub repository to support the bot!"
-            embed.add_field(name="<:license:737733205645590639> LICENSE", value=f"[MIT](https://opensource.org/licenses/MIT)")
+            embed.add_field(name="<:license:737733205645590639> LICENSE", value=f"GNU AGPL")
             embed.set_thumbnail(url=self.bot.user.avatar_url)
-            embed.set_image(url='https://media.discordapp.net/attachments/381963689470984203/740703797843722431/Screen_Shot_2020-08-05_at_6.52.17_PM.png')
+            embed.set_image(url='https://media.discordapp.net/attachments/738163422117625876/743146606790049872/Screen_Shot_2020-08-12_at_12.39.08_PM.png')
             await ctx.send(embed=embed)
         else:
             cmd = self.bot.get_command(command)
@@ -89,10 +89,10 @@ class Meta(commands.Cog):
             embed = self.bot.embed(title=f"<:star:737736250718421032> Sourcecode for command {cmd.name}{char}{'/'.join(cmd.aliases)}", url=url)
             embed.description = "Star the GitHub repository to support the bot!"
             embed.add_field(name="<:license:737733205645590639> LICENSE",
-                            value=f"[MIT](https://opensource.org/licenses/MIT)")
+                            value=f"GNU AGPL")
             embed.set_thumbnail(url=self.bot.user.avatar_url)
             embed.set_image(
-                url='https://media.discordapp.net/attachments/381963689470984203/740703797843722431/Screen_Shot_2020-08-05_at_6.52.17_PM.png')
+                url='https://media.discordapp.net/attachments/738163422117625876/743146606790049872/Screen_Shot_2020-08-12_at_12.39.08_PM.png')
             await ctx.send(embed=embed)
 
     @commands.command()
